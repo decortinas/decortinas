@@ -8,6 +8,7 @@ def tienda(request):
     # Resto del código para la función de vista
     productos = Product.objects.all()
     pagina_tienda = get_object_or_404(Pagina, pagename='Tienda')
+    promos = Promo.objects.all()
     pageslogan = pagina_tienda.pageslogan
     pagetitle = pagina_tienda.pagetitle
     pagename = pagina_tienda.pagename
@@ -34,7 +35,8 @@ def tienda(request):
         'pagename': pagename,
         'pagebannermov': pagebannermov,
         'pagetitle': pagetitle,
-        'pageslogan': pageslogan
+        'pageslogan': pageslogan,
+        'promos':promos,
     })
 
 class ProductDetailView(DetailView):
@@ -43,7 +45,7 @@ class ProductDetailView(DetailView):
     context_object_name = 'producto'
 
     def get_object(self):
-        return Product.objects.get(producturl=self.kwargs['producturl'])
+        return get_object_or_404(Product, producturl=self.kwargs['producturl'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -55,6 +57,11 @@ class ProductDetailView(DetailView):
         context['ogtitle'] = self.object.productogtitle
         context['ogurlimg'] = self.object.productogurlsec
         context['ogdesc'] = self.object.productogdesc
+
+        # Agregar la lista de promociones al contexto
+        promos = Promo.objects.all()
+        context['promos'] = promos
+
         return context
 
 def servicios(request):
