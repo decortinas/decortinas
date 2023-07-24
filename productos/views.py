@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Asesor, Product, Pagina, Comment, Video
+from .models import Asesor, Product, Pagina, Comment, Video, Promo
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView
 # from django.views.generic.base import RedirectView
@@ -197,6 +197,7 @@ def index(request):
     video =get_object_or_404(Video, videoname='Sheer Elegance')
     videourl = video.videourl
     pagina_home = get_object_or_404(Pagina, pagename='Home')
+    promos = Promo.objects.all()
     pageslogan = pagina_home.pageslogan
     pagetitle = pagina_home.pagetitle
     pagename = pagina_home.pagename
@@ -227,6 +228,7 @@ def index(request):
         'pageogimg': pageogimg,
         'pageogurlsec': pageogurlsec,
         'videourl':videourl,
+        'promos':promos,
     }
     return render(request, 'home.html', context)
 
